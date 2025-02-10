@@ -8,7 +8,7 @@ namespace TextProcessor
         private System.Windows.Forms.Button btnSaveFile;
         private System.Windows.Forms.TextBox txtOriginal;
         private System.Windows.Forms.TextBox txtProcessed;
-
+        private System.Windows.Forms.Label lblStats;
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -65,6 +65,15 @@ namespace TextProcessor
             this.txtProcessed.Size = new System.Drawing.Size(372, 150);
             this.txtProcessed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 
+            // lblStats
+            this.lblStats = new System.Windows.Forms.Label();
+            this.lblStats.Location = new System.Drawing.Point(12, 360);
+            this.lblStats.Name = "lblStats";
+            this.lblStats.Size = new System.Drawing.Size(400, 60);
+            this.lblStats.Text = "Statistiques du texte :";
+            this.lblStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblStats.Padding = new System.Windows.Forms.Padding(5);
+
             // MainForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,10 +83,13 @@ namespace TextProcessor
             this.Controls.Add(this.btnSaveFile);
             this.Controls.Add(this.txtOriginal);
             this.Controls.Add(this.txtProcessed);
+            this.Controls.Add(this.lblStats);
             this.Name = "MainForm";
             this.Text = "Text Processor";
             this.ResumeLayout(false);
             this.PerformLayout();
+
+
         }
     }
 }

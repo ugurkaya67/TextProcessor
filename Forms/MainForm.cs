@@ -36,7 +36,18 @@ namespace TextProcessor
                 return;
             }
 
-            txtProcessed.Text = TextProcessor.ProcessText(txtOriginal.Text);
+            string processedText = TextProcessor.ProcessText(txtOriginal.Text);
+            txtProcessed.Text = processedText;
+
+            // Obtenir les statistiques du texte
+            var stats = TextStats.AnalyzeText(processedText);
+
+            // Afficher les statistiques dans lblStats
+            lblStats.Text = $"Lignes : {stats.lines}\n" +
+                            $"Mots : {stats.words}\n" +
+                            $"Caractères (avec espaces) : {stats.charsWithSpaces}\n" +
+                            $"Caractères (sans espaces) : {stats.charsWithoutSpaces}\n" +
+                            $"Mots fréquents : {string.Join(", ", stats.frequentWords.Select(kvp => $"{kvp.Key} ({kvp.Value})"))}";
         }
 
         private void btnSaveFile_Click(object sender, EventArgs e)
