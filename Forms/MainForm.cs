@@ -70,5 +70,30 @@ namespace TextProcessor
                 MessageBox.Show("Fichier enregistré avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            txtOriginal.Clear();
+            txtProcessed.Clear();
+            lblStats.Text = "Statistiques du texte :";
+            filePath = string.Empty;
+            txtSearch.Clear();
+            txtReplace.Clear();
+        }
+        private void btnReplace_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtSearch.Text))
+            {
+                MessageBox.Show("Veuillez entrer un mot à rechercher.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(txtProcessed.Text))
+            {
+                txtProcessed.Text = txtProcessed.Text.Replace(txtSearch.Text, txtReplace.Text ?? "");
+                MessageBox.Show($"Tous les '{txtSearch.Text}' ont été remplacés par '{txtReplace.Text}'.", "Remplacement effectué", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
     }
 }
