@@ -27,8 +27,7 @@ namespace TextProcessor
                 txtOriginal.Text = File.ReadAllText(filePath);
             }
         }
-
-        private void btnProcessFile_Click(object sender, EventArgs e)
+        private async void btnProcessFile_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(filePath))
             {
@@ -36,19 +35,40 @@ namespace TextProcessor
                 return;
             }
 
-            string processedText = TextProcessor.ProcessText(txtOriginal.Text);
+            string originalText = txtOriginal.Text;
+            string[] lines = originalText.Split(new[] { '\n' }, StringSplitOptions.None);
+
+            progressBar.Visible = true;
+            progressBar.Value = 0;
+
+            int totalLines = lines.Length;
+            int batchSize = 500; // Traiter 500 lignes à la fois
+            int processedLines = 0;
+            string processedText = "";
+
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < totalLines; i += batchSize)
+                {
+                    int remainingLines = Math.Min(batchSize, totalLines - i);
+                    string batch = string.Join("\n", lines.Skip(i).Take(remainingLines));
+
+                    processedText += TextProcessor.ProcessText(batch) + "\n";
+
+                    processedLines += remainingLines;
+                    this.Invoke(new Action(() =>
+                    {
+                        progressBar.Value = (processedLines * 100) / totalLines;
+                    }));
+                }
+            });
+
             txtProcessed.Text = processedText;
-
-            // Obtenir les statistiques du texte
-            var stats = TextStats.AnalyzeText(processedText);
-
-            // Afficher les statistiques dans lblStats
-            lblStats.Text = $"Lignes : {stats.lines}\n" +
-                            $"Mots : {stats.words}\n" +
-                            $"Caractères (avec espaces) : {stats.charsWithSpaces}\n" +
-                            $"Caractères (sans espaces) : {stats.charsWithoutSpaces}\n" +
-                            $"Mots fréquents : {string.Join(", ", stats.frequentWords.Select(kvp => $"{kvp.Key} ({kvp.Value})"))}";
+            progressBar.Visible = false;
+            MessageBox.Show("Traitement terminé !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+
 
         private void btnSaveFile_Click(object sender, EventArgs e)
         {
