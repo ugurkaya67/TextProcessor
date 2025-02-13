@@ -14,9 +14,18 @@ namespace TextProcessor
         public MainForm()
         {
             InitializeComponent(); // Vérifie que ce fichier existe bien
+            InitializeAdditionalComponents();
             this.filePaths = new List<string>();
         }
-
+        private void InitializeAdditionalComponents()
+        {
+            // lstFiles - Liste des fichiers sélectionnés
+            lstFiles = new ListBox();
+            lstFiles.Location = new System.Drawing.Point(12, 520);
+            lstFiles.Name = "lstFiles";
+            lstFiles.Size = new System.Drawing.Size(600, 100);
+            this.Controls.Add(lstFiles);
+        }
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -27,14 +36,17 @@ namespace TextProcessor
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                filePaths = openFileDialog.FileNames.ToList();
                 if (lstFiles == null)
                 {
                     lstFiles = new ListBox();
                     this.Controls.Add(lstFiles);
                 }
+
+                filePaths = openFileDialog.FileNames.ToList();
                 lstFiles.Items.Clear();
                 lstFiles.Items.AddRange(filePaths.ToArray());
+
+                // Charger le contenu des fichiers correctement dans txtOriginal
                 txtOriginal.Text = string.Join("\n------\n", filePaths.Select(File.ReadAllText));
             }
         }
