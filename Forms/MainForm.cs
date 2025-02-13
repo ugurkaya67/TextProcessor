@@ -8,33 +8,44 @@ namespace TextProcessor
     public partial class MainForm : Form
     {
         private string filePath;
+        private ListBox lstFiles;
+        private List<string> filePaths;
 
         public MainForm()
         {
             InitializeComponent(); // Vérifie que ce fichier existe bien
+            this.filePaths = new List<string>();
         }
 
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*"
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                Multiselect = true
             };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                filePath = openFileDialog.FileName;
-                txtOriginal.Text = File.ReadAllText(filePath);
+                filePaths = openFileDialog.FileNames.ToList();
+                if (lstFiles == null)
+                {
+                    lstFiles = new ListBox();
+                    this.Controls.Add(lstFiles);
+                }
+                lstFiles.Items.Clear();
+                lstFiles.Items.AddRange(filePaths.ToArray());
+                txtOriginal.Text = string.Join("\n------\n", filePaths.Select(File.ReadAllText));
             }
         }
         private async void btnProcessFile_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(filePath))
+
+            if (filePaths == null || filePaths.Count == 0)
             {
-                MessageBox.Show("Veuillez d'abord charger un fichier TXT.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Veuillez d'abord charger un ou plusieurs fichiers TXT.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
             string originalText = txtOriginal.Text;
             string[] lines = originalText.Split(new[] { '\n' }, StringSplitOptions.None);
 
@@ -93,10 +104,17 @@ namespace TextProcessor
 
         private void btnReset_Click(object sender, EventArgs e)
         {
+            if (filePaths != null) 
+            {
+                filePaths.Clear();
+            }
+            
             txtOriginal.Clear();
             txtProcessed.Clear();
             lblStats.Text = "Statistiques du texte :";
-            filePath = string.Empty;
+            
+            lstFiles.Items.Clear();  
+            
             txtSearch.Clear();
             txtReplace.Clear();
         }

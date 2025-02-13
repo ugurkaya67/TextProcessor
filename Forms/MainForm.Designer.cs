@@ -37,16 +37,15 @@ namespace TextProcessor
             this.btnReset = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.txtReplace = new System.Windows.Forms.TextBox();
-            //this.lblSearch = new System.Windows.Forms.TextBox();
-            //this.lblReplace = new System.Windows.Forms.TextBox();
             this.btnReplace = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            
             this.SuspendLayout();
             
             // btnLoadFile
             this.btnLoadFile.Location = new System.Drawing.Point(12, 12);
             this.btnLoadFile.Name = "btnLoadFile";
-            this.btnLoadFile.Size = new System.Drawing.Size(120, 30);
+            this.btnLoadFile.Size = new System.Drawing.Size(140, 30);
             this.btnLoadFile.Text = "Charger un fichier";
             this.btnLoadFile.UseVisualStyleBackColor = true;
             this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
