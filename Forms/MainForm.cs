@@ -10,6 +10,7 @@ namespace TextProcessor
         private string filePath;
         private ListBox lstFiles;
         private List<string> filePaths;
+        private bool isDarkMode = false;
 
         public MainForm()
         {
@@ -142,6 +143,63 @@ namespace TextProcessor
             {
                 txtProcessed.Text = txtProcessed.Text.Replace(txtSearch.Text, txtReplace.Text ?? "");
                 MessageBox.Show($"Tous les '{txtSearch.Text}' ont été remplacés par '{txtReplace.Text}'.", "Remplacement effectué", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
+        private void btnDarkMode_Click(object sender, EventArgs e)
+        {
+            isDarkMode = !isDarkMode;
+
+            if (isDarkMode)
+            {
+                this.BackColor = Color.Black;
+                this.ForeColor = Color.White;
+
+                txtOriginal.BackColor = Color.Gray;
+                txtOriginal.ForeColor = Color.White;
+                txtProcessed.BackColor = Color.Gray;
+                txtProcessed.ForeColor = Color.White;
+                lblStats.ForeColor = Color.White;
+                lstFiles.BackColor = Color.Gray;
+                lstFiles.ForeColor = Color.White;
+
+                // Mettre les boutons en mode sombre
+                foreach (Control ctrl in this.Controls)
+                {
+                    if (ctrl is Button btn)
+                    {
+                        btn.BackColor = Color.DarkGray;
+                        btn.ForeColor = Color.Black; // Texte en noir pour rester visible
+                    }
+                }
+
+                btnDarkMode.Text = "Mode Clair";
+            }
+            else
+            {
+                this.BackColor = SystemColors.Control;
+                this.ForeColor = SystemColors.ControlText;
+
+                txtOriginal.BackColor = SystemColors.Window;
+                txtOriginal.ForeColor = SystemColors.WindowText;
+                txtProcessed.BackColor = SystemColors.Window;
+                txtProcessed.ForeColor = SystemColors.WindowText;
+                lblStats.ForeColor = SystemColors.ControlText;
+                lstFiles.BackColor = SystemColors.Window;
+                lstFiles.ForeColor = SystemColors.WindowText;
+
+                // Remettre les boutons en mode clair
+                foreach (Control ctrl in this.Controls)
+                {
+                    if (ctrl is Button btn)
+                    {
+                        btn.BackColor = SystemColors.Control;
+                        btn.ForeColor = SystemColors.ControlText; // Texte en noir par défaut
+                    }
+                }
+
+                btnDarkMode.Text = "Mode Sombre";
             }
         }
 

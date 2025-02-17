@@ -14,8 +14,9 @@ namespace TextProcessor
         private System.Windows.Forms.TextBox txtReplace;
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.Label lblReplace;
-        private System.Windows.Forms.Button btnReplace ;
+        private System.Windows.Forms.Button btnReplace;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Button btnDarkMode;
 
  
         protected override void Dispose(bool disposing)
@@ -39,20 +40,21 @@ namespace TextProcessor
             this.txtReplace = new System.Windows.Forms.TextBox();
             this.btnReplace = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.btnDarkMode = new System.Windows.Forms.Button();
             
             this.SuspendLayout();
             
             // btnLoadFile
             this.btnLoadFile.Location = new System.Drawing.Point(12, 12);
             this.btnLoadFile.Name = "btnLoadFile";
-            this.btnLoadFile.Size = new System.Drawing.Size(140, 30);
+            this.btnLoadFile.Size = new System.Drawing.Size(130, 30);
             this.btnLoadFile.Text = "Charger un fichier";
             this.btnLoadFile.UseVisualStyleBackColor = true;
             this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
 
             // btnProcessFile
             this.btnProcessFile = new System.Windows.Forms.Button();
-            this.btnProcessFile.Location = new System.Drawing.Point(138, 12);
+            this.btnProcessFile.Location = new System.Drawing.Point(160, 12);
             this.btnProcessFile.Name = "btnProcessFile";
             this.btnProcessFile.Size = new System.Drawing.Size(120, 30);
             this.btnProcessFile.Text = "Traiter le fichier";
@@ -61,7 +63,7 @@ namespace TextProcessor
             this.Controls.Add(this.btnProcessFile);
 
             // btnSaveFile
-            this.btnSaveFile.Location = new System.Drawing.Point(264, 12);
+            this.btnSaveFile.Location = new System.Drawing.Point(320, 12);
             this.btnSaveFile.Name = "btnSaveFile";
             this.btnSaveFile.Size = new System.Drawing.Size(120, 30);
             this.btnSaveFile.Text = "Enregistrer";
@@ -84,7 +86,7 @@ namespace TextProcessor
 
             // btnReset
             btnReset = new Button();
-            btnReset.Location = new System.Drawing.Point(390, 12);
+            btnReset.Location = new System.Drawing.Point(480, 12);
             btnReset.Name = "btnReset";
             btnReset.Size = new System.Drawing.Size(120, 30);
             btnReset.Text = "Réinitialiser";
@@ -147,6 +149,16 @@ namespace TextProcessor
             this.progressBar.Visible = false;
             this.Controls.Add(this.progressBar);
             
+            // Bouton pour le mode sombre
+            
+            btnDarkMode.Location = new System.Drawing.Point(640, 12);
+            btnDarkMode.Name = "btnDarkMode";
+            btnDarkMode.Size = new System.Drawing.Size(120, 30);
+            btnDarkMode.Text = "Mode Sombre";
+            btnDarkMode.UseVisualStyleBackColor = true;
+            btnDarkMode.Click += new System.EventHandler(this.btnDarkMode_Click);
+            
+
 
             // MainForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -165,6 +177,7 @@ namespace TextProcessor
             this.Controls.Add(this.txtReplace);
             this.Controls.Add(this.btnReplace);
             this.Controls.Add(this.progressBar);
+            this.Controls.Add(btnDarkMode);
             this.Name = "MainForm";
             this.Text = "Text Processor";
             this.ResumeLayout(false);
