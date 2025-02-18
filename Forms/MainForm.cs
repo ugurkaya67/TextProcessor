@@ -51,48 +51,52 @@ namespace TextProcessor
                 txtOriginal.Text = string.Join("\n------\n", filePaths.Select(File.ReadAllText));
             }
         }
-        private async void btnProcessFile_Click(object sender, EventArgs e)
+        private void btnProcessFile_Click(object sender, EventArgs e)
         {
-
-            if (filePaths == null || filePaths.Count == 0)
+            if (filePaths.Count == 0)
             {
                 MessageBox.Show("Veuillez d'abord charger un ou plusieurs fichiers TXT.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            string originalText = txtOriginal.Text;
-            string[] lines = originalText.Split(new[] { '\n' }, StringSplitOptions.None);
 
-            progressBar.Visible = true;
-            progressBar.Value = 0;
+            string processedContent = "";
 
-            int totalLines = lines.Length;
-            int batchSize = 500; // Traiter 500 lignes à la fois
-            int processedLines = 0;
-            string processedText = "";
-
-            await Task.Run(() =>
+            foreach (var filePath in filePaths)
             {
-                for (int i = 0; i < totalLines; i += batchSize)
-                {
-                    int remainingLines = Math.Min(batchSize, totalLines - i);
-                    string batch = string.Join("\n", lines.Skip(i).Take(remainingLines));
+                string text = File.ReadAllText(filePath);
+                string processedText = TextProcessor.ProcessText(text);
+                processedContent += processedText + "\n------\n";  // Concaténer tous les textes transformés
 
-                    processedText += TextProcessor.ProcessText(batch) + "\n";
+                string newFilePath = Path.Combine(Path.GetDirectoryName(filePath),
+                                                Path.GetFileNameWithoutExtension(filePath) + "_modifié.txt");
+                File.WriteAllText(newFilePath, processedText);
+            }
 
-                    processedLines += remainingLines;
-                    this.Invoke(new Action(() =>
-                    {
-                        progressBar.Value = (processedLines * 100) / totalLines;
-                    }));
-                }
-            });
+            // Mise à jour txtProcessed avec le texte transformé
+            txtProcessed.Text = processedContent.Trim(); 
 
-            txtProcessed.Text = processedText;
-            progressBar.Visible = false;
-            MessageBox.Show("Traitement terminé !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Mise à jour des statistiques après traitement
+            UpdateStats();
+
+            MessageBox.Show("Tous les fichiers ont été traités et enregistrés !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void UpdateStats()
+        {
+            if (!chkShowStats.Checked)
+            {
+                lblStats.Text = "Statistiques du texte :";
+                return;
+            }
 
+            // Génère les statistiques et les affiche
+            var stats = TextStats.AnalyzeText(txtProcessed.Text);
+            lblStats.Text = $"Lignes : {stats.lines}\n" +
+                            $"Mots : {stats.words}\n" +
+                            $"Caractères (avec espaces) : {stats.charsWithSpaces}\n" +
+                            $"Caractères (sans espaces) : {stats.charsWithoutSpaces}\n" +
+                            $"Mots fréquents : {string.Join(", ", stats.frequentWords.Select(kvp => $"{kvp.Key} ({kvp.Value})"))}";
+        }
 
         private void btnSaveFile_Click(object sender, EventArgs e)
         {
@@ -202,6 +206,63 @@ namespace TextProcessor
                 btnDarkMode.Text = "Mode Sombre";
             }
         }
+        private void chkShowStats_CheckedChanged(object sender, EventArgs e)
+        {
+            lblStats.Visible = chkShowStats.Checked;
 
+            if (chkShowStats.Checked)
+            {
+                UpdateStats();
+            }
+        }
+        private void btnExportStats_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(lblStats.Text) || lblStats.Text == "Statistiques du texte :")
+            {
+                MessageBox.Show("Aucune statistique disponible à exporter.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV File (*.csv)|*.csv|JSON File (*.json)|*.json",
+                FileName = "text_statistics"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = saveFileDialog.FileName;
+                string extension = Path.GetExtension(filePath);
+
+                if (extension == ".csv")
+                {
+                    File.WriteAllText(filePath, ConvertStatsToCSV());
+                }
+                else if (extension == ".json")
+                {
+                    File.WriteAllText(filePath, ConvertStatsToJSON());
+                }
+
+                MessageBox.Show("Statistiques exportées avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private string ConvertStatsToCSV()
+        {
+            return lblStats.Text.Replace("\n", ",");
+        }
+
+        private string ConvertStatsToJSON()
+        {
+            var stats = new
+            {
+                Lignes = lblStats.Text.Split('\n')[0].Split(':')[1].Trim(),
+                Mots = lblStats.Text.Split('\n')[1].Split(':')[1].Trim(),
+                CaractèresAvecEspaces = lblStats.Text.Split('\n')[2].Split(':')[1].Trim(),
+                CaractèresSansEspaces = lblStats.Text.Split('\n')[3].Split(':')[1].Trim(),
+                MotsFréquents = lblStats.Text.Split('\n')[4].Split(':')[1].Trim()
+            };
+
+            return System.Text.Json.JsonSerializer.Serialize(stats, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        }
     }
 }

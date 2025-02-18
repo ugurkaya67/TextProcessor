@@ -17,8 +17,9 @@ namespace TextProcessor
         private System.Windows.Forms.Button btnReplace;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button btnDarkMode;
+        private System.Windows.Forms.CheckBox chkShowStats;
+        private System.Windows.Forms.Button btnExportStats;
 
- 
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -158,7 +159,25 @@ namespace TextProcessor
             btnDarkMode.UseVisualStyleBackColor = true;
             btnDarkMode.Click += new System.EventHandler(this.btnDarkMode_Click);
             
+            // chkShowStats - Activer/Désactiver les statistiques
+            chkShowStats = new System.Windows.Forms.CheckBox();
+            chkShowStats.Location = new System.Drawing.Point(12, 430);
+            chkShowStats.Name = "chkShowStats";
+            chkShowStats.Size = new System.Drawing.Size(200, 25);
+            chkShowStats.Text = "Afficher les statistiques";
+            chkShowStats.Checked = true; // Statistiques activées par défaut
+            chkShowStats.CheckedChanged += new System.EventHandler(this.chkShowStats_CheckedChanged);
+            
 
+            // btnExportStats - Exporter les statistiques
+            btnExportStats = new System.Windows.Forms.Button();
+            btnExportStats.Location = new System.Drawing.Point(220, 430);
+            btnExportStats.Name = "btnExportStats";
+            btnExportStats.Size = new System.Drawing.Size(150, 30);
+            btnExportStats.Text = "Exporter les statistiques";
+            btnExportStats.UseVisualStyleBackColor = true;
+            btnExportStats.Click += new System.EventHandler(this.btnExportStats_Click);
+            
 
             // MainForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -178,6 +197,9 @@ namespace TextProcessor
             this.Controls.Add(this.btnReplace);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(btnDarkMode);
+            this.Controls.Add(chkShowStats);
+            this.Controls.Add(btnExportStats);
+
             this.Name = "MainForm";
             this.Text = "Text Processor";
             this.ResumeLayout(false);
