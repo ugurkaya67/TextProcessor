@@ -173,7 +173,7 @@ namespace TextProcessor
             btnExportStats = new System.Windows.Forms.Button();
             btnExportStats.Location = new System.Drawing.Point(220, 430);
             btnExportStats.Name = "btnExportStats";
-            btnExportStats.Size = new System.Drawing.Size(150, 30);
+            btnExportStats.Size = new System.Drawing.Size(150, 40);
             btnExportStats.Text = "Exporter les statistiques";
             btnExportStats.UseVisualStyleBackColor = true;
             btnExportStats.Click += new System.EventHandler(this.btnExportStats_Click);

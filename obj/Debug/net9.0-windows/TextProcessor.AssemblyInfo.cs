@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TextProcessor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca9aa4737b6b69b2addd0a395fce0b895b6f550e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+938993c182a9d9d0bcdf6e422900271392619047")]
 [assembly: System.Reflection.AssemblyProductAttribute("TextProcessor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TextProcessor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
